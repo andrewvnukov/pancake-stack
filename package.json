@@ -1,0 +1,19 @@
+{
+  "name": "pancake-stack",
+  "version": "1.0.0",
+  "description": "Самодостаточный каркас HTML5-игры под Яндекс Игры. Каждую неделю конвейер копирует эту папку в `../../<Имя игры>/` и дописывает игровую логику в местах, помеченных `// GAME:`.",
+  "main": "index.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "module",
+  "dependencies": {
+    "playwright": "^1.61.1"
+  }
+}
