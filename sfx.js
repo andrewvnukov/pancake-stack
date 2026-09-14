@@ -18,6 +18,14 @@ function ensureAudio(){
 }
 addEventListener("pointerdown", ()=>{ const ctx=ensureAudio(); if(ctx&&ctx.state!=="running") ctx.resume().catch(()=>{}); }, {once:true, passive:true});
 
+// ---------- Приглушение звука: вручную (реклама) и по видимости вкладки ----------
+// Реклама (showRewardedVideo/showFullscreenAdv) НЕ забирает фокус страницы,
+// поэтому visibilitychange на неё не срабатывает — глушить нужно вручную из
+// onOpen/onClose колбэков. Тем же механизмом гасим звук при уходе со вкладки.
+function audioSuspend(){ try{ if(audioCtx && audioCtx.state==="running") audioCtx.suspend(); }catch(e){} }
+function audioResume(){ try{ if(audioCtx && audioCtx.state==="suspended" && document.visibilityState==="visible") audioCtx.resume().catch(()=>{}); }catch(e){} }
+document.addEventListener("visibilitychange", ()=>{ if(document.hidden) audioSuspend(); else audioResume(); });
+
 const rand = (a=1,b=0) => b+(a-b)*Math.random();
 
 // ---------- ZzFXMicro: генерация сэмплов по параметрам ----------
@@ -81,7 +89,9 @@ const SFX = {
   buy:  [.65,0,600,.02,.08,.18,0,1.6,0,0,160,.06,.1,0,0,0,0,.85,.05],     // тёплый "плюх" покупки начинки
   error:[.5,0,120,.02,.06,.22,1,.7,0,0,0,0,0,.22,0,.05,0,.7,.06],         // мягкий низкий "шлёп" промаха
 };
-function sfx(name){ try{ zzfx(...SFX[name]); }catch(e){} }
+// window.__silent — досчёт офлайна/прогон баланса: игровой шаг зовётся тысячи раз,
+// и синтез звука на каждом шаге стоит секунды. Звук — эффект живой игры, не симуляции.
+function sfx(name){ if(window.__silent) return; try{ zzfx(...SFX[name]); }catch(e){} }
 
 // ---------- Генеративный музыкальный луп ----------
 // A-мажор, 100 BPM, прогрессия A–F#m–D–E (I–vi–IV–V), сыграна дважды (2 круга
