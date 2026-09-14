@@ -27,7 +27,9 @@
     --accent:#E8A33D; --accent-deep:#C97F22;
     --gold:#F2C14E; --mint:#8FBF7A; --lav:#B497D6; --dusk:#7BA6C9;
     --bg:#F6D9A0;
+    --ok:#8FBF7A; --ok-deep:#548C3E; --rowbg:#FFF3DC;
   }
+  [hidden]{display:none!important}
   *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;user-select:none;-webkit-user-select:none}
   html,body{height:100%;overflow:hidden}
   body{font-family:'Nunito',system-ui,sans-serif;color:var(--ink);position:fixed;inset:0;background:var(--bg)}
@@ -63,7 +65,7 @@
   .abtn.off{filter:grayscale(.55) brightness(.92)}
   /* ── модалка (начинки/апгрейды/полка) ── */
   #modal{position:absolute;inset:0;background:rgba(40,24,10,.55);display:flex;align-items:flex-end;
-         justify-content:center;pointer-events:auto;z-index:5;transition:opacity .2s}
+         justify-content:center;pointer-events:auto;z-index:9;transition:opacity .2s}
   #modal.hidden{opacity:0;pointer-events:none}
   .sheet{position:relative;background:linear-gradient(180deg,#FFFDF5,#FBEED2);width:100%;max-width:560px;
          border:3px solid var(--line);border-bottom:none;border-radius:24px 24px 0 0;
@@ -95,6 +97,71 @@
   .card .cn{font-weight:900;font-size:12px;margin-top:3px}
   .card.locked{opacity:.72}
   .card .qm{font-weight:900;font-size:30px;color:var(--ink-soft);height:56px;line-height:56px}
+  /* ── средний горизонт: полоска остановки под шапкой ── */
+  .routebar{width:100%;max-width:340px;margin-top:8px;background:var(--paper);border:2.5px solid var(--line);
+        border-radius:16px;padding:7px 10px;box-shadow:0 3px 0 rgba(0,0,0,.22);pointer-events:auto;
+        cursor:pointer;display:flex;flex-direction:column;gap:4px;text-align:left;font-family:inherit;color:var(--ink)}
+  .routebar:active{transform:translateY(2px);box-shadow:0 1px 0 rgba(0,0,0,.22)}
+  .rb-head{display:flex;align-items:center;gap:7px;font-weight:900;font-size:12.5px;line-height:1.1}
+  .rb-head .dots{display:flex;gap:3px;flex:none}
+  .rb-head .dots i{width:8px;height:8px;border-radius:50%;background:rgba(0,0,0,.18);border:1.5px solid var(--line);display:block}
+  .rb-head .dots i.on{background:var(--ok)}
+  .rb-head .nm{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .rb-goal{display:flex;gap:6px;align-items:baseline;font-size:11.5px;font-weight:800;color:var(--ink-soft)}
+  .rb-goal .gp{margin-left:auto;font-weight:900;color:var(--ink);flex:none}
+  .rb-goal.ready{color:var(--ok-deep)}
+  .top{flex-wrap:wrap}
+  .chip{min-width:0}
+  @media (max-width:370px){
+    .chip{padding:5px 8px 5px 6px;gap:5px}
+    .chip .ic{width:20px;height:20px}
+    .chip .v{font-size:14px}
+    .chip .l{font-size:8.5px;letter-spacing:0}
+  }
+  /* ── карта маршрута ── */
+  .stop{display:flex;gap:10px;align-items:flex-start;background:var(--rowbg);border:2.5px solid var(--line);
+        border-radius:16px;padding:9px 10px;margin-bottom:8px;box-shadow:0 2px 0 rgba(0,0,0,.15)}
+  .stop.cur{border-color:var(--accent-deep)}
+  .stop.done{opacity:.86}
+  .stop.fog{opacity:.6}
+  .stop .num{width:30px;height:30px;flex:none;border-radius:50%;background:var(--paper);border:2.5px solid var(--line);
+        font-weight:900;font-size:13px;display:flex;align-items:center;justify-content:center}
+  .stop.done .num{background:var(--ok);color:#fff}
+  .stop.cur .num{background:var(--accent);color:#fff}
+  .stop .sb{flex:1;min-width:0}
+  .stop .sn{font-weight:900;font-size:15px}
+  .stop .sw{font-size:11.5px;font-weight:800;color:var(--ink-soft);margin-top:2px}
+  .glist{margin-top:7px;display:flex;flex-direction:column;gap:5px}
+  .gitem{display:flex;gap:7px;align-items:center;font-size:12px;font-weight:800;background:var(--paper);
+        border:2px solid var(--line);border-radius:11px;padding:5px 8px}
+  .gitem .gm{width:15px;height:15px;flex:none;border-radius:50%;border:2px solid var(--line);background:rgba(0,0,0,.14)}
+  .gitem.ok .gm{background:var(--ok)}
+  .gitem .gt{flex:1;min-width:0}
+  .gitem .gv{font-weight:900;flex:none}
+  .wide{width:100%;border:2.5px solid var(--accent-deep);background:var(--accent);color:#fff;font-weight:900;
+        font-size:15px;padding:11px;border-radius:14px;cursor:pointer;box-shadow:0 3px 0 rgba(0,0,0,.2);
+        margin-top:4px;font-family:inherit}
+  .wide:active{transform:translateY(2px);box-shadow:0 1px 0 rgba(0,0,0,.2)}
+  .wide.okb{background:var(--ok);border-color:var(--ok-deep)}
+  .wide.ghost{background:rgba(0,0,0,.07);border-color:var(--ink-soft);color:var(--ink-soft)}
+  .note{font-size:12px;font-weight:800;color:var(--ink-soft);text-align:center;margin:8px 2px 2px;line-height:1.35}
+  .offline{display:flex;align-items:center;gap:9px;font-size:13.5px;font-weight:800;background:var(--rowbg);
+        border:2.5px solid var(--line);border-radius:14px;padding:8px 10px;margin-bottom:7px}
+  .offline .ov{margin-left:auto;font-weight:900}
+  .dayrow{display:grid;grid-template-columns:repeat(7,1fr);gap:5px;margin-bottom:10px}
+  .dayc{border:2.5px solid var(--line);border-radius:11px;background:var(--rowbg);padding:6px 2px;text-align:center;
+        font-weight:900;font-size:10.5px;box-shadow:0 2px 0 rgba(0,0,0,.13)}
+  .dayc.past{background:var(--ok);color:#fff}
+  .dayc.cur{background:var(--gold);border-color:var(--accent-deep)}
+  .dayc .dv{display:block;font-size:9px;font-weight:800;opacity:.9;margin-top:2px}
+  /* ── контекстная подсказка ── */
+  .bubble{position:fixed;width:230px;z-index:20;background:var(--ink);color:#fff;font-weight:800;font-size:12.5px;
+        line-height:1.3;padding:9px 11px;border-radius:13px;box-shadow:0 4px 14px rgba(0,0,0,.4);
+        transform:translate(-50%,-100%);pointer-events:none}
+  .bubble.side{transform:translate(-100%,-50%)}
+  .tipTarget{position:relative;z-index:16;outline:3px solid var(--gold);outline-offset:2px;border-radius:14px;
+        animation:tipPulse 1.2s ease-in-out infinite}
+  @keyframes tipPulse{0%,100%{outline-color:var(--gold)}50%{outline-color:rgba(240,193,78,.35)}}
   #toast{position:absolute;left:50%;bottom:104px;transform:translateX(-50%) translateY(20px);
          background:var(--ink);color:#fff;font-weight:800;font-size:14px;padding:9px 16px;border-radius:99px;
          opacity:0;transition:.25s;pointer-events:none;z-index:8;text-align:center;max-width:82%}
@@ -113,8 +180,16 @@
       <svg class="ic" viewBox="0 0 26 26"><rect x="6" y="15" width="14" height="4" rx="2" fill="#E8A33D" stroke="#5C3B23" stroke-width="1.8"/><rect x="7.5" y="10" width="11" height="4" rx="2" fill="#EEB85C" stroke="#5C3B23" stroke-width="1.8"/><rect x="9" y="5" width="8" height="4" rx="2" fill="#F2C97A" stroke="#5C3B23" stroke-width="1.8"/></svg>
       <span class="tx"><span class="v" id="heightV">0</span><span class="l" id="heightL">ВЫСОТА</span></span>
     </div>
+    <div class="chip" id="seedChip" hidden>
+      <svg class="ic" viewBox="0 0 26 26"><path d="M13 3l2.6 5.4 5.9.8-4.3 4.2 1 5.9L13 16.5 7.8 19.3l1-5.9L4.5 9.2l5.9-.8z" fill="#F2C14E" stroke="#5C3B23" stroke-width="2" stroke-linejoin="round"/></svg>
+      <span class="tx"><span class="v" id="seedV">0</span><span class="l" id="seedL">СОТЫ</span></span>
+    </div>
     <div class="spacer"></div>
   </div>
+  <button class="routebar" id="routeChip">
+    <span class="rb-head"><span class="dots"><i id="rd0"></i><i id="rd1"></i><i id="rd2"></i></span><span class="nm" id="rbName">—</span><span id="rbNum">1/6</span></span>
+    <span class="rb-goal" id="rbGoal"><span class="gt" id="rbGoalT">—</span><span class="gp" id="rbGoalV"></span></span>
+  </button>
   <div class="spacer"></div>
   <div class="bottom">
     <button class="abtn blue" id="giftBtn"><span class="bt" id="giftT">Подарок</span><span class="bs"><svg viewBox="0 0 12 12"><path d="M2 4h8v6H2z" fill="none" stroke="#fff" stroke-width="1.4"/><path d="M6 2v8M2 4l4 0 4 0" stroke="#fff" stroke-width="1.4"/></svg><span id="giftS">+50</span></span></button>
@@ -135,6 +210,7 @@
 </div>
 <div id="modal" class="hidden"><div class="sheet"><button id="mClose">×</button><div id="mTitle"></div><div id="mScroll"><div id="mBody"></div></div></div></div>
 <div id="toast"></div>
+<div class="bubble" id="bubble" hidden></div>
 <script>
 'use strict';
 // ============================================================
@@ -149,11 +225,21 @@ const LB_NAME  = "height";
 let ysdk=null, player=null, lb=null, saveT=0, booted=false;
 
 // ---------- i18n ----------
+// Язык платформы читаем ПЕРВЫМ ДЕЛОМ на каждом запуске, до применения
+// сохранённого выбора игрока: если код выходит раньше, чем дойдёт до
+// ysdk.environment.i18n.lang, дебаг-панель площадки покажет «I18N is not used».
+// Автоопределённый язык НЕ сохраняем — сохраняется только явный выбор игрока.
+let platformLang=null;
+function readPlatformLang(){
+  try{ if(ysdk&&ysdk.environment&&ysdk.environment.i18n&&ysdk.environment.i18n.lang){
+    platformLang = ysdk.environment.i18n.lang==="ru"?"ru":"en"; return platformLang; } }catch(e){}
+  platformLang = (navigator.language||"ru").slice(0,2)==="ru"?"ru":"en";
+  return platformLang;
+}
 function lang(){
+  if(platformLang===null) readPlatformLang();
   try{ if(S && (S.lang==="ru"||S.lang==="en")) return S.lang; }catch(e){}
-  try{ if(ysdk&&ysdk.environment&&ysdk.environment.i18n&&ysdk.environment.i18n.lang)
-    return ysdk.environment.i18n.lang==="ru"?"ru":"en"; }catch(e){}
-  return (navigator.language||"ru").slice(0,2)==="ru"?"ru":"en";
+  return platformLang;
 }
 function toggleLang(){
   S.lang = lang()==="ru" ? "en" : "ru";
@@ -182,92 +268,643 @@ const STR = {
   fell:{ru:"Стопка упала! Высота:",en:"Stack fell! Height:"},
   perfect:{ru:"Идеально!",en:"Perfect!"},
   saved:{ru:"Спасено лопаткой!",en:"Saved by the spatula!"},
-  ipsUnit:{ru:"начинок",en:"toppings"},
+  ipsUnit:{ru:"мёда/с",en:"honey/s"},
+  perSec:{ru:"/с",en:"/s"},
+
+  // ── маршрут (дальний горизонт) ──
+  routeTitle:{ru:"Путь к небесной блинной",en:"Road to the sky pancake house"},
+  stopWord:{ru:"Место",en:"Place"},
+  stopLocked:{ru:"???",en:"???"},
+  moveOn:{ru:"Переехать",en:"Move on"},
+  movedTo:{ru:"Новое место:",en:"New place:"},
+  twistWord:{ru:"Новое правило",en:"New rule"},
+  bringsAlong:{ru:"Полка, улучшения и мёд едут с тобой. Прошлые места продолжают приносить доход.",
+               en:"The shelf, upgrades and honey come with you. Past places keep earning."},
+  goalsLeft:{ru:"Осталось",en:"Left"},
+  finaleTitle:{ru:"Небесная блинная открыта!",en:"The sky pancake house is open!"},
+  finaleText:{ru:"Ты прошёл путь от домашней кухни до блинной под самыми облаками. Дальше — второй круг: те же места, но крупнее, и +25% ко всему доходу навсегда за пройденный путь.",
+              en:"You went from a home kitchen to a pancake house up in the clouds. Next comes a second lap: the same places, bigger, plus a permanent +25% income for the road behind you."},
+  finaleGo:{ru:"Начать второй круг",en:"Start the second lap"},
+  loopWord:{ru:"Круг",en:"Lap"},
+
+  // ── цели чек-листа ──
+  gCollect:{ru:"Открыть начинок",en:"Unlock toppings"},
+  gIncome:{ru:"Довести доход до",en:"Reach income of"},
+  g_drops:{ru:"Уложить блинов",en:"Stack pancakes"},
+  g_height:{ru:"Собрать стопку высотой",en:"Build a stack of"},
+  g_combo:{ru:"Идеальных подряд",en:"Perfect stacks in a row"},
+  g_seeds:{ru:"Растопить сот",en:"Melt honeycombs"},
+  g_jarOne:{ru:"Собрать 5 банок одной начинки",en:"Gather 5 jars of one topping"},
+
+  // ── остановки ──
+  s0:{ru:"Домашняя кухня",en:"Home kitchen"},
+  s1:{ru:"Дворовая веранда",en:"Backyard porch"},
+  s2:{ru:"Городская ярмарка",en:"Town fair"},
+  s3:{ru:"Речной причал",en:"River pier"},
+  s4:{ru:"Горный трактир",en:"Mountain inn"},
+  s5:{ru:"Небесная блинная",en:"Sky pancake house"},
+  w0:{ru:"Базовая петля: роняй блин, копи мёд, открывай начинки",en:"The base loop: drop, earn, unlock toppings"},
+  w1:{ru:"Помощник с половником: раз в 12 секунд блин ложится сам",en:"A helper with a ladle: a pancake lands by itself every 12 seconds"},
+  w2:{ru:"Золотой блин: каждый седьмой блин даёт впятеро больше",en:"Golden pancake: every seventh one pays five times more"},
+  w3:{ru:"Запасная лопатка: +1 бесплатная страховка от промаха в заходе",en:"Spare spatula: +1 free miss rescue per run"},
+  w4:{ru:"Широкая сковорода: блины начинаются на четверть шире",en:"Wide pan: pancakes start a quarter wider"},
+  w5:{ru:"Двойная порция: одна укладка кладёт сразу два блина",en:"Double helping: one tap stacks two pancakes"},
+
+  // ── медовые соты (премиальная валюта) ──
+  seeds:{ru:"СОТЫ",en:"COMBS"},
+  seedsTitle:{ru:"Медовые соты",en:"Honeycombs"},
+  seedsDesc:{ru:"Соты дают места маршрута и ежедневная серия. Каждая растопленная сота — навсегда +10% ко всему доходу.",
+             en:"Combs come from route places and the daily streak. Each melted comb is a permanent +10% to all income."},
+  seedPlant:{ru:"Растопить",en:"Melt it"},
+  seedNone:{ru:"Сот нет",en:"No combs"},
+  seedBonusNow:{ru:"Сейчас от сот:",en:"Comb bonus now:"},
+  seedGot:{ru:"Сот:",en:"Combs:"},
+  shelfBonus:{ru:"Полка даёт",en:"The shelf gives"},
+  inShelf:{ru:"на полке",en:"on the shelf"},
+  bought:{ru:"Куплено:",en:"Bought:"},
+
+  // ── офлайн ──
+  offTitle:{ru:"Пока тебя не было",en:"While you were away"},
+  offAway:{ru:"Тебя не было",en:"You were away for"},
+  offCap:{ru:"Полка копит мёд не дольше 12 часов — дальше она просто ждёт тебя.",
+          en:"The shelf stores honey for at most 12 hours — after that it simply waits for you."},
+  offTotal:{ru:"Всего",en:"Total"},
+  offClaim:{ru:"Забрать",en:"Collect"},
+  offClaimX2:{ru:"Забрать ×2",en:"Collect ×2"},
+  offForecast:{ru:"Пока тебя нет, накопится ≈",en:"While you are away: ≈"},
+  otherItems:{ru:"Остальные",en:"The rest"},
+  hOur:{ru:"ч",en:"h"}, hMin:{ru:"мин",en:"min"},
+
+  // ── ежедневная серия ──
+  dailyTitle:{ru:"С возвращением!",en:"Welcome back!"},
+  dailyStreak:{ru:"Серия заходов",en:"Daily streak"},
+  dailyDay:{ru:"День",en:"Day"},
+  dailyTake:{ru:"Забрать",en:"Claim"},
+  dailyTakeX2:{ru:"Забрать ×2",en:"Claim ×2"},
+
+  // ── подсказки ──
+  tipX2:{ru:"Хочешь вдвое больше мёда? Посмотри короткий ролик",en:"Want twice the honey? Watch a short video"},
+  tipMap:{ru:"Здесь виден весь путь и что нужно для переезда",en:"The whole road and what the next move needs"},
+  tipOffline:{ru:"Банки на полке капают мёдом и без тебя, даже когда игра закрыта",en:"Jars on the shelf keep dripping honey even when the game is closed"},
+  tipSeeds:{ru:"Растопи соту — прибавка к доходу останется навсегда",en:"Melt a comb — the income bonus stays forever"},
+  tipJar:{ru:"Купи ещё банку той же начинки — доход полки сложится",en:"Buy another jar of the same topping — shelf income adds up"},
+
+  // ── ярлык ──
+  scTitle:{ru:"Поставить игру на экран?",en:"Add the game to your home screen?"},
+  scText:{ru:"Ярлык на главном экране — и блинная открывается в одно нажатие. За установку дадим соту.",
+           en:"A shortcut on your home screen opens the pancake house in one tap. We will give you a honeycomb for it."},
+  scAdd:{ru:"Добавить",en:"Add"},
+  later:{ru:"Потом",en:"Later"},
 };
 const T = k => (STR[k]||{})[lang()] || (STR[k]||{}).ru || k;
 const nm = o => lang()==="ru"? o.ru : o.en;
 
 // ---------- Начинки (полка вкусов, фиксированный порядок открытия) ----------
+// Начинка — это банка на полке: она и множит выручку за укладку (mult),
+// и КАПАЕТ МЁДОМ сама (ips). Банок одного вида можно набрать сколько угодно,
+// цена следующей растёт мелким множителем (idle-economy-balance.md §2.2, §3).
 const TOPPINGS = [
-  {id:'honey',  ru:'Мёд «Золотинка»',     en:'Honey "Goldie"',       c1:'#F2C14E', c2:'#C97F22', shape:'honey',  mult:0.03, cost:40},
-  {id:'jam',    ru:'Варенье «Рубин»',     en:'Raspberry Jam "Ruby"', c1:'#C9375A', c2:'#8C2140', shape:'jam',    mult:0.03, cost:120},
-  {id:'cond',   ru:'Сгущёнка «Кремика»',  en:'Condensed Milk "Creamy"', c1:'#FFF3D6', c2:'#E8C98A', shape:'cond', mult:0.03, cost:300},
-  {id:'choco',  ru:'Шок. паста «Ирис»',   en:'Choco Spread "Toffee"',c1:'#7A4A2C', c2:'#4E2E18', shape:'choco',  mult:0.03, cost:700},
-  {id:'berry',  ru:'Ягоды «Сад»',         en:'Berries "Garden"',     c1:'#5A5FC7', c2:'#8C2140', shape:'berry',  mult:0.03, cost:1500},
-  {id:'cream',  ru:'Сметана «Пушинка»',   en:'Sour Cream "Fluff"',   c1:'#FFFBF0', c2:'#E5DCC4', shape:'cream',  mult:0.03, cost:3000},
-  {id:'maple',  ru:'Кленовый сироп «Клён»',en:'Maple Syrup "Maple"', c1:'#C97822', c2:'#8A4E14', shape:'maple',  mult:0.03, cost:6000},
-  {id:'banana', ru:'Банан «Солнышко»',    en:'Banana "Sunny"',       c1:'#F2E06A', c2:'#C9A93E', shape:'banana', mult:0.03, cost:12000},
-  {id:'nuts',   ru:'Орехи «Хрустик»',     en:'Nuts "Crunch"',        c1:'#B98352', c2:'#7A5230', shape:'nuts',   mult:0.03, cost:24000},
+  {id:'honey', ru:'Мёд «Золотинка»', en:'Honey "Goldie"', c1:'#F2C14E', c2:'#C97F22', shape:'honey', mult:0.03, ips:1.0, cost:40},
+  {id:'jam', ru:'Варенье «Рубин»', en:'Raspberry Jam "Ruby"', c1:'#C9375A', c2:'#8C2140', shape:'jam', mult:0.03, ips:2.4, cost:160},
+  {id:'cond', ru:'Сгущёнка «Кремика»', en:'Condensed Milk "Creamy"', c1:'#FFF3D6', c2:'#E8C98A', shape:'cond', mult:0.03, ips:5.76, cost:640},
+  {id:'choco', ru:'Шок. паста «Ирис»', en:'Choco Spread "Toffee"', c1:'#7A4A2C', c2:'#4E2E18', shape:'choco', mult:0.03, ips:13.82, cost:2560},
+  {id:'berry', ru:'Ягоды «Сад»', en:'Berries "Garden"', c1:'#5A5FC7', c2:'#8C2140', shape:'berry', mult:0.03, ips:33.18, cost:10240},
+  {id:'cream', ru:'Сметана «Пушинка»', en:'Sour Cream "Fluff"', c1:'#FFFBF0', c2:'#E5DCC4', shape:'cream', mult:0.03, ips:79.63, cost:40960},
+  {id:'maple', ru:'Кленовый сироп «Клён»', en:'Maple Syrup "Maple"', c1:'#C97822', c2:'#8A4E14', shape:'maple', mult:0.03, ips:191.1, cost:163840},
+  {id:'banana', ru:'Банан «Солнышко»', en:'Banana "Sunny"', c1:'#F2E06A', c2:'#C9A93E', shape:'banana', mult:0.03, ips:458.65, cost:655360},
+  {id:'nuts', ru:'Орехи «Хрустик»', en:'Nuts "Crunch"', c1:'#B98352', c2:'#7A5230', shape:'nuts', mult:0.03, ips:1100.75, cost:2621440},
 ];
+const COPY_MUL = 1.13;
 const TI = id => TOPPINGS.find(s=>s.id===id);
+
+// ============================================================
+//  МАРШРУТ — дальний горизонт (playermotivation.md §2)
+//  Шесть мест, у каждого: свой контент (следующая начинка), своя
+//  картинка (палитра сцены) и ровно один механический твист.
+//  Последнее место — псевдофинал: экран «ты дошёл» + второй круг.
+// ============================================================
+const ROUTE = [
+  { id:'s0', twist:'w0', maxItems:3, pal:{sky1:'#FFE9B8', sky2:'#F6D9A0', warm:'#F2C14E'} },
+  { id:'s1', twist:'w1', maxItems:4, pal:{sky1:'#DCEFC4', sky2:'#BFE0A0', warm:'#A8D67A'} },
+  { id:'s2', twist:'w2', maxItems:5, pal:{sky1:'#FFD9C4', sky2:'#F2B48C', warm:'#E8834D'} },
+  { id:'s3', twist:'w3', maxItems:7, pal:{sky1:'#CDE7F5', sky2:'#9EC9E8', warm:'#7BA6C9'} },
+  { id:'s4', twist:'w4', maxItems:8, pal:{sky1:'#E4DCF0', sky2:'#BFAEDB', warm:'#9B84C9'} },
+  { id:'s5', twist:'w5', maxItems:9, pal:{sky1:'#FFF3D0', sky2:'#DCE9F7', warm:'#F2E06A'} },
+];
+const ROUTE_N = ROUTE.length;
+// Во столько примерно вырастает доход за круг: всё, что измеряется в мёде,
+// на следующем круге считается от темпа игрока, а не абсолютными числами.
+const LOOP_SCALE = 550;
+const MAX_LOOP = 20;              // за этим пределом Math.pow уходит в Infinity
+const loopScale = () => Math.pow(LOOP_SCALE, Math.min(MAX_LOOP, S.loop||0));
+
+// Чек-лист места — ровно три пункта РАЗНОГО типа (собрать / достичь / сделать).
+const GOALS = [
+  [ {t:'collect',n:3}, {t:'income',n:5.5e2}, {t:'height',n:12} ],
+  [ {t:'collect',n:4}, {t:'income',n:1.8e3}, {t:'drops',n:150} ],
+  [ {t:'collect',n:5}, {t:'income',n:5.0e3}, {t:'combo',n:6} ],
+  [ {t:'collect',n:7}, {t:'income',n:3.5e4}, {t:'jarOne',n:1} ],
+  [ {t:'collect',n:8}, {t:'income',n:1.0e5}, {t:'height',n:40} ],
+  [ {t:'collect',n:9}, {t:'income',n:3.0e5}, {t:'seeds',n:6} ],
+];
+const stop      = () => ROUTE[Math.min(ROUTE_N-1, Math.max(0, S.route|0))];
+const stopIdx   = () => Math.min(ROUTE_N-1, Math.max(0, S.route|0));
+// Твист включён навсегда, как только игрок до него доехал, и второй круг
+// НИЧЕГО не отнимает: пройденный маршрут оставляет все правила открытыми.
+const hasTwist  = w => (S.loop||0)>0 || ROUTE.some((r,i)=> r.twist===w && stopIdx()>=i);
+const itemsUnlocked = () => (S.loop||0)>0 ? TOPPINGS.length : Math.max(3, stop().maxItems);
 
 // ---------- Состояние ----------
 function freshStack(){ return [{w:0,x:0,c:0}]; } // заполняется в startRound()
 function fresh(){ return {
-  v:1, coins:0,
-  toppings:[],                                 // открытые начинки (полка)
+  v:2, coins:0,
+  lifetime:0,                                   // суммарно ЗАРАБОТАНО (только earn, без подарков)
+  jars:{},                                      // id -> сколько банок на полке (источник дохода)
+  toppings:[],                                  // виды, открытые хотя бы раз (множитель выручки)
   upSteady:0, upTray:0, upEye:0,                // уровни апгрейдов
   bestHeight:0,                                 // рекорд высоты за один заход (лидерборд)
+  drops:0, maxCombo:0,                          // счётчики для чек-листа (живая игра, не офлайн)
+  seeds:0, seedsUsed:0,                         // премиальная валюта и растопленные соты
+  route:0, routeDone:[], routeSeen:0, loop:0, finaleSeen:0,
   stack:null, combo:0, roundSaves:0, speedLvl:0,
-  x2Until:0, lastGift:0, lastDaily:"",
-  lang:null, hintDropShown:false,
+  x2Until:0, lastGift:0,
+  daily:{day:"",streak:0},
+  tips:{},
+  lastSeen:0,
+  shortcutAsked:false, reviewAsked:false,
+  lang:null, hintDropShown:false, hintShown:false,
   time:Date.now()
 };}
 let S = fresh();
+let testNoSave=false;   // тест-хук: подменить сейв и перезагрузиться, не дав игре его перезаписать
 
-// ---------- Экономика ----------
+// ============================================================
+//  ЭКОНОМИКА
+//  Одно место, где собраны ВСЕ множители (idle-economy-balance.md §6).
+//  Внутри источника — сложение, между источниками — умножение.
+//  Единственный временный множитель — ×2 за ролик: худший случай ×2, не ×8.
+// ============================================================
+const MAX_TRAY=12, MAX_EYE=12, MAX_STEADY=5;
 const x2On        = () => Date.now() < S.x2Until;
-const toppingMult  = () => 1 + S.toppings.reduce((a,id)=>a+TI(id).mult,0);
+
+// ── постоянные источники ──
+const seedMult    = () => Math.pow(1.10, S.seedsUsed||0);      // соты: умножение (§4.2)
+const loopMult    = () => 1 + 0.25*(S.loop||0);                // пройденные круги: сложение
+const toppingMult = () => 1 + S.toppings.reduce((a,id)=>{ const t=TI(id); return a+(t?t.mult:0); },0);
+const permMult    = () => toppingMult()*seedMult()*loopMult();
+
+// ── полка как источник пассивного дохода ──
+const jarCount   = id => (S.jars && S.jars[id]) ? S.jars[id] : 0;
+const farmCount  = jarCount;
+const farmTotal  = () => TOPPINGS.reduce((a,t)=>a+jarCount(t.id),0);
+const collectionCount = () => S.toppings.length;
+const ITEMS = TOPPINGS, ITEM_ICON = "🍯", ITEM_ICON2 = "🫙";
+const baseIps = () => TOPPINGS.reduce((a,t)=> a + jarCount(t.id)*t.ips, 0) * permMult();
+const ips     = () => baseIps() * (x2On()?2:1);
+
+// ── укладка блина ──
 const comboMult    = () => Math.min(4, 1+S.combo*0.25);
-const MAX_TRAY=6, MAX_EYE=8, MAX_STEADY=5;
-const trayCost   = () => S.upTray>=MAX_TRAY?0:Math.floor(50 * Math.pow(1.7, S.upTray));
-const eyeCost    = () => S.upEye>=MAX_EYE?0:Math.floor(70 * Math.pow(1.55, S.upEye));
-const steadyCost = () => S.upSteady>=MAX_STEADY?0:Math.floor(60 * Math.pow(2.0, S.upSteady));
-const perfectRatio = () => Math.max(0.6, 0.92 - 0.035*S.upEye);
+// «золотой блин» (твист) — каждый седьмой впятеро дороже
+const goldenDrop   = () => hasTwist('w2') && ((S.drops+1)%7===0);
+const dropBase     = () => (3+Math.floor(S.stack.length*0.5)) * permMult() * loopScale();
+const dropGain     = () => dropBase() * comboMult() * (goldenDrop()?5:1) * (x2On()?2:1);
+const perfectRatio = () => Math.max(0.6, 0.92 - 0.025*S.upEye);
 const missRatio     = 0.14;
-const nextTopping= () => TOPPINGS.find(s=> !S.toppings.includes(s.id));
-const toppingCost= sp => sp.cost;
-// для базового понимания прогресса (не используется в HUD напрямую)
+const panWide       = () => hasTwist('w4') ? 1.25 : 1;    // «широкая сковорода»
+const dropsPerTap   = () => hasTwist('w5') ? 2 : 1;       // «двойная порция»
+const freeSaves     = () => S.upSteady + (hasTwist('w3')?1:0);
+
+// ── цены ──
+const trayCost   = () => S.upTray  >=MAX_TRAY  ?0:Math.round(50*Math.pow(1.6,S.upTray)*loopScale());
+const eyeCost    = () => S.upEye   >=MAX_EYE   ?0:Math.round(70*Math.pow(1.55,S.upEye)*loopScale());
+const steadyCost = () => S.upSteady>=MAX_STEADY?0:Math.round(60*Math.pow(2.0,S.upSteady)*loopScale());
+const nextTopping= () => TOPPINGS.find((t,i)=> !S.toppings.includes(t.id) && i<itemsUnlocked());
+const toppingCost= t => Math.max(1, Math.round(t.cost * Math.pow(COPY_MUL, jarCount(t.id)) * loopScale()));
 const upCost = () => { const n=nextTopping(); return n? toppingCost(n) : 0; };
 
+// ============================================================
+//  earn / grant — подарки НЕ идут в метрики прогресса
+//  (idle-monetization.md §9, idle-economy-balance.md §7)
+// ============================================================
+function earn(a){ if(!(a>0)) return; S.coins+=a; S.lifetime=(S.lifetime||0)+a; }
+function grant(a){ if(!(a>0)) return; S.coins+=a; }
+function spend(a){ S.coins=Math.max(0, S.coins-a); }
+
+// ── источники для целей чек-листа, специфичные для этой игры ──
+const GOAL_SRC = {
+  drops:  () => S.drops,
+  height: () => S.bestHeight,
+  combo:  () => S.maxCombo,
+  seeds:  () => S.seedsUsed,
+  jarOne: () => TOPPINGS.some(t=>jarCount(t.id)>=5) ? 1 : 0,
+};
+const hasProgress = () => S.toppings.length>0 || S.drops>=5;
+
 // ---------- Сейвы ----------
-function persist(force){
+function persist(force, flush){
+  if(catchUp || testNoSave) return;   // во время досчёта офлайна не сохраняем на каждом шаге
   const now=Date.now();
   if(!force && now-saveT<10000) return;
   saveT=now;
+  S.lastSeen=now;
   const raw=JSON.stringify(S);
   try{ localStorage.setItem(SAVE_KEY,raw); }catch(e){}
-  if(player){ try{ player.setData({save:raw}); }catch(e){} }
+  if(player){ try{ player.setData({save:raw}, !!flush); }catch(e){} }
 }
+let lastFlushAt=0;
+function flushSave(){
+  // дожим накопленной облачной записи при уходе со страницы; сам дожим тоже
+  // троттлим, иначе дёрганое переключение вкладок сожжёт лимит (100 запросов/5 мин)
+  const now=Date.now();
+  if(now-lastFlushAt<3000) return;
+  lastFlushAt=now; persist(true, true);
+}
+document.addEventListener("visibilitychange", ()=>{ if(document.hidden){ audioSuspend(); flushSave(); } else audioResume(); });
+addEventListener("pagehide", flushSave);
 function restore(raw){
   if(!raw) return;
-  try{ const d=(typeof raw==="string")?JSON.parse(raw):(raw.save?JSON.parse(raw.save):raw);
-       if(d&&typeof d==="object") S=Object.assign(fresh(),d); }catch(e){}
+  // битый/чужой сейв не должен заклинивать запуск: при ошибке разбора остаётся
+  // ЧИСТЫЙ fresh(), а не наполовину слитый объект
+  let hadRoute=true;
+  try{
+    const d=(typeof raw==="string")?JSON.parse(raw):(raw.save?JSON.parse(raw.save):raw);
+    if(d&&typeof d==="object"){ hadRoute=(typeof d.route==="number"); S=Object.assign(fresh(),d); }
+  }catch(e){ S=fresh(); return; }
+
+  // неизвестный id начинки (сейв из будущей версии) резолвится в «ничего»,
+  // а не в самую дорогую начинку игры
   if(!Array.isArray(S.toppings)) S.toppings=[];
+  S.toppings = S.toppings.filter(id => !!TI(id));
+  // полка: в старых сейвах её нет — каждый открытый вид считаем за одну банку,
+  // чтобы действующий игрок не потерял свой доход
+  if(!S.jars || typeof S.jars!=="object" || Array.isArray(S.jars)) S.jars={};
+  const jars={};
+  TOPPINGS.forEach(t=>{ const n=Math.max(0, Math.round(Number(S.jars[t.id])||0));
+    if(n>0) jars[t.id]=Math.min(n, 1e6); });
+  S.toppings.forEach(id=>{ if(!jars[id]) jars[id]=1; });
+  S.jars=jars;
+
+  const num=(v,d)=>(typeof v==="number" && isFinite(v) && v>=0)?v:d;
+  S.coins=num(S.coins,0); S.lifetime=num(S.lifetime,S.coins);
+  S.upTray  =Math.min(MAX_TRAY,  num(S.upTray,0)|0);
+  S.upEye   =Math.min(MAX_EYE,   num(S.upEye,0)|0);
+  S.upSteady=Math.min(MAX_STEADY,num(S.upSteady,0)|0);
+  S.bestHeight=num(S.bestHeight,0)|0; S.drops=num(S.drops,0)|0; S.maxCombo=num(S.maxCombo,0)|0;
+  S.seeds=num(S.seeds,0)|0; S.seedsUsed=num(S.seedsUsed,0)|0;
+  S.loop=Math.min(MAX_LOOP,num(S.loop,0)|0);
+  if(!S.daily || typeof S.daily!=="object") S.daily={day:"",streak:0};
+  S.daily.streak=Math.min(7,Math.max(0,num(S.daily.streak,0)|0));
+  if(typeof S.daily.day!=="string") S.daily.day="";
+  if(!S.tips || typeof S.tips!=="object") S.tips={};   // поле появилось позже самой игры
+
+  // ── миграция маршрута: у старого сейва полей маршрута нет ──
+  // место вычисляем из уже достигнутого и ПРОМАТЫВАЕМ выполненное БЕЗ ВЫПЛАТ
+  S.route=Math.min(ROUTE_N-1, Math.max(0, num(S.route,0)|0));
+  if(!Array.isArray(S.routeDone)) S.routeDone=[];
+  if(!hadRoute){
+    let r=0;
+    for(let i=0;i<ROUTE_N;i++){ if(goalsMetAt(i)) r=Math.min(ROUTE_N-1,i+1); else break; }
+    S.route=r; S.routeDone=[]; S.routeSeen=Math.min(ROUTE_N-1,r+1);
+    S.seedsUsed=0;                                    // соты за прошлое не выдаём
+  }
+  S.routeSeen=Math.min(ROUTE_N-1, Math.max(S.route, num(S.routeSeen,0)|0));
+  S.finaleSeen=num(S.finaleSeen,0)|0;
+  S.lastSeen=num(S.lastSeen,0);
 }
 
-// ---------- Реклама ----------
-let lastAd=0;
-function maybeInterstitial(){
-  if(!ysdk) return;
-  if(Date.now()-lastAd < 180000) return;
-  lastAd=Date.now();
-  try{ ysdk.adv.showFullscreenAdv({}); }catch(e){}
+// ============================================================
+//  РЕКЛАМА (idle-monetization.md §2-3)
+//  Ролик стартует ТОЛЬКО по явному нажатию игрока. Звук глушим вручную
+//  в onOpen и возвращаем в onClose: страница при показе рекламы фокус
+//  НЕ теряет, поэтому visibilitychange здесь не сработает.
+// ============================================================
+const AD_IDLE_S=30, AD_GAP_S=210, AD_WARMUP_S=90, AD_RETRY_S=45;
+let nextAdAt=0, lastInputAt=Date.now(), adBusy=false, bootAt=Date.now();
+addEventListener('pointerdown', ()=>{ lastInputAt=Date.now(); }, true);
+
+function adAllowed(){
+  if(!booted || adBusy || !ysdk) return false;
+  if(document.hidden) return false;                       // показ в фон — мимо
+  if(Date.now()-bootAt < AD_WARMUP_S*1000) return false;  // не встречаем игрока рекламой
+  if(Date.now() < nextAdAt) return false;
+  if(Date.now()-lastInputAt < AD_IDLE_S*1000) return false; // только в простое
+  if(modalOpen) return false;
+  if(x2On()) return false;                                // не рвём оплаченный бонус
+  return true;
 }
+function showInterstitial(){
+  if(adBusy || !ysdk || !ysdk.adv || !ysdk.adv.showFullscreenAdv) return;
+  adBusy=true;
+  const finish = wasShown => {
+    adBusy=false; audioResume();
+    // собственную паузу отсчитываем ОТ ФАКТА показа: при wasShown:false
+    // показа не было и ждать полный интервал незачем
+    nextAdAt = Date.now() + (wasShown ? AD_GAP_S : AD_RETRY_S)*1000;
+  };
+  try{
+    ysdk.adv.showFullscreenAdv({ callbacks:{
+      onOpen: ()=>audioSuspend(),
+      onClose: was=>finish(!!was),
+      onError: ()=>finish(false),
+    }});
+  }catch(e){ finish(false); }
+}
+function maybeInterstitial(){ if(adAllowed()) showInterstitial(); }
+
 function showRewarded(onReward){
-  if(!ysdk){ onReward(); return; }
-  try{ ysdk.adv.showRewardedVideo({callbacks:{ onRewarded:onReward, onError:onReward, onClose:()=>{} }}); }
-  catch(e){ onReward(); }
+  if(!ysdk || !ysdk.adv){ onReward(); return; }   // вне платформы — выдаём сразу
+  let paid=false;
+  // onError может прийти ПОСЛЕ onRewarded — без флага награда выдастся дважды
+  const pay = ()=>{ if(!paid){ paid=true; onReward(); } };
+  try{
+    ysdk.adv.showRewardedVideo({ callbacks:{
+      onOpen:     ()=>audioSuspend(),
+      onRewarded: pay,
+      onClose:    ()=>audioResume(),
+      onError:    ()=>{ audioResume(); pay(); },   // игрок не виноват, что ролик не загрузился
+    }});
+  }catch(e){ onReward(); }
 }
 
 // ---------- Лидерборд ----------
-function submitScore(v){ try{ if(lb&&LB_NAME) lb.setLeaderboardScore(LB_NAME, Math.floor(v)); }catch(e){} }
+// актуальный API — ysdk.leaderboards.setScore; getLeaderboards() устарел и у
+// его объекта методы называются иначе. Поддерживаем оба поколения, приводя к
+// одному виду, троттлим запись (лимит 1/с) и не пишем нулевой результат.
+let lastLbAt=0, lastLbVal=-1;
+function submitScore(v){
+  v=Math.floor(v||0); if(v<=0 || v<=lastLbVal) return;
+  const now=Date.now(); if(now-lastLbAt<1500) return;
+  if(!player || !player.isAuthorized || !player.isAuthorized()) return;  // писать может только авторизованный
+  lastLbAt=now; lastLbVal=v;
+  try{
+    if(lb && typeof lb.setScore==="function") lb.setScore(LB_NAME, v);
+    else if(lb && typeof lb.setLeaderboardScore==="function") lb.setLeaderboardScore(LB_NAME, v);
+  }catch(e){}
+}
+
+
+// ============================================================
+//  МАРШРУТ: движок чек-листа и переезда (playermotivation.md §3, §8)
+// ============================================================
+// требования, измеряемые в валюте, масштабируются кругом маршрута
+const goalReq = (i,k) => {
+  const g=GOALS[Math.min(GOALS.length-1,i)][k];
+  return g.t==='income' ? g.n*loopScale() : g.n;
+};
+const goalType = (i,k) => GOALS[Math.min(GOALS.length-1,i)][k].t;
+function goalCur(i,k){
+  const t=goalType(i,k);
+  if(t==='income') return baseIps();     // без временных множителей: цель — устойчивый доход
+  if(t==='collect') return collectionCount();
+  return GOAL_SRC[t] ? GOAL_SRC[t]() : 0;
+}
+const goalMet  = (i,k) => goalCur(i,k) >= goalReq(i,k);
+const goalsMetAt = i => [0,1,2].every(k=>goalMet(i,k));
+const stopReady  = () => goalsMetAt(stopIdx());
+const isFinalStop = () => stopIdx() >= ROUTE_N-1;
+function goalText(i,k){
+  const g=GOALS[Math.min(GOALS.length-1,i)][k];
+  if(g.t==='income')  return T("gIncome")+" "+fmt(goalReq(i,k))+" "+T("ipsUnit");
+  if(g.t==='collect') return T("gCollect")+" "+g.n;
+  return T("g_"+g.t) + (g.n>1 ? " ×"+g.n : "");
+}
+function goalProgress(i,k){
+  const g=GOALS[Math.min(GOALS.length-1,i)][k];
+  if(g.n<=1) return goalMet(i,k)?"✓":"—";
+  return fmt(Math.min(goalCur(i,k),goalReq(i,k)))+"/"+fmt(goalReq(i,k));
+}
+// ближайшая незакрытая цель — то, что видно в шапке (средний горизонт)
+function nextGoal(){
+  const i=stopIdx();
+  for(let k=0;k<3;k++) if(!goalMet(i,k)) return {k, text:goalText(i,k), prog:goalProgress(i,k)};
+  return null;
+}
+// награда за остановку — ТОЛЬКО grant, иначе подарки разгоняют прогресс
+const stopSeeds = i => (i>=ROUTE_N-1 ? 6 : 2);
+function advanceRoute(){
+  if(!stopReady()) return false;
+  const i=stopIdx();
+  S.seeds += stopSeeds(i);
+  grant(Math.max(100, baseIps()*180));
+  sfx("buy");
+  if(isFinalStop()){
+    // псевдофинал: настоящий экран «ты дошёл», после него — второй круг.
+    // Ничего не отнимаем, прибавка за пройденный путь остаётся навсегда.
+    S.loop=Math.min(MAX_LOOP,(S.loop||0)+1); S.finaleSeen=(S.finaleSeen||0)+1;
+    S.route=0; S.routeSeen=Math.max(S.routeSeen,1);
+    persist(true); refreshHud(); openModal('finale');
+    askReview();
+    return true;
+  }
+  S.route=i+1;
+  S.routeSeen=Math.min(ROUTE_N-1, Math.max(S.routeSeen, S.route+1));
+  persist(true); refreshHud();
+  toast(T("movedTo")+" "+T(stop().id));
+  rebuildScene();
+  openModal('route');
+  return true;
+}
+
+// ============================================================
+//  ОФЛАЙН-ДОХОД (idle-monetization.md §5)
+//  Три независимых порога: MIN — с какой отлучки вообще начисляем,
+//  CAP — потолок начисления, REPORT — с какой отлучки показываем сводку.
+//  CAP > REPORT, иначе появляется мёртвая зона: игрок между ними
+//  получает максимум, но окна не видит и не понимает, что игра работала.
+// ============================================================
+const OFF_MIN_S = 60, OFF_CAP_S = 12*3600, OFF_REPORT_S = 4*3600;
+const FF_STEP = 15;
+// Предел шагов выводим ИЗ потолка, а не пишем числом — иначе они разъедутся
+// и потолок молча обрежется.
+const FF_MAX_STEPS = Math.ceil(OFF_CAP_S/FF_STEP) + 10;
+let catchUp=false;               // идёт досчёт: без сейвов, звука, частиц и целей
+let offlineReport=null;
+
+function fastForward(seconds){
+  catchUp=true; window.__silent=true;
+  try{
+    let rem=seconds, guard=0;
+    while(rem>0 && guard++<FF_MAX_STEPS){ simulateTick(Math.min(FF_STEP,rem)); rem-=FF_STEP; }
+  } finally { catchUp=false; window.__silent=false; }
+}
+function checkOffline(){
+  const now=Date.now();
+  const last=S.lastSeen||0;
+  S.lastSeen=now;
+  if(!last) return false;
+  const away=Math.floor((now-last)/1000);
+  if(away<OFF_MIN_S) return false;
+  const capped = away>OFF_CAP_S;
+  const used = Math.min(away, OFF_CAP_S);
+  const before=S.coins;
+  fastForward(used);
+  const gained=S.coins-before;
+  offlineReport={away, used, capped, gained, x2Taken:false};
+  return away>=OFF_REPORT_S || gained>0;
+}
+// Прогноз показываем, ТОЛЬКО когда доход реально пойдёт. Если условий нет —
+// пустая строка, а не уговоры «купи ещё»: реклама своих механик раздражает.
+function offlineForecast(){
+  if(baseIps()<=0) return "";
+  return T("offForecast")+fmt(baseIps()*3600)+"/"+T("hOur");
+}
+
+// ============================================================
+//  ЕЖЕДНЕВНАЯ СЕРИЯ (idle-monetization.md §4)
+//  Цикл 7 дней, награда привязана к текущему темпу игрока (фиксированная
+//  сумма через месяц превращается в мусор), день определяем по строке
+//  даты, а не по таймстемпу — иначе «сутки» ездят.
+// ============================================================
+const dayKey = d => new Date(d).toISOString().slice(0,10);
+const dailyReward = i => Math.max(120, Math.round(baseIps()*60*(2+i)));
+const dailySeeds  = i => (i===2||i===6) ? 1 : 0;    // премиальная валюта на 3-й и 7-й день
+let dailyPending=false;
+function checkDaily(){
+  const today=dayKey(Date.now());
+  if(S.daily.day===today){ dailyPending=false; return false; }
+  // окно «Серия: 1 день» на самом первом запуске выглядит абсурдно и перекрывает
+  // обучение — показываем только тем, у кого уже есть прогресс
+  if(!hasProgress()){ dailyPending=false; return false; }
+  const yest=dayKey(Date.now()-86400000);
+  S.daily.streak = (S.daily.day===yest) ? Math.min(7, S.daily.streak+1) : 1;
+  dailyPending=true;
+  return true;
+}
+function claimDaily(x2){
+  if(!dailyPending) return;
+  const i=Math.max(0,Math.min(6,S.daily.streak-1));
+  const give = ()=>{
+    grant(dailyReward(i)*(x2?2:1));                 // подарок — grant, не earn
+    S.seeds += dailySeeds(i);
+    S.daily.day=dayKey(Date.now()); dailyPending=false;
+    refreshHud(); persist(true); sfx("coin"); closeModal();
+    maybeInterstitial();                            // закрытие окна — естественная пауза
+  };
+  if(x2) showRewarded(give); else give();
+}
+
+// ============================================================
+//  ПОДСКАЗКИ (idle-monetization.md §7)
+//  Отдельная от обучения система: триггеры условные, а не последовательные,
+//  и показываются ВСЕМ, включая давних игроков, — они и есть основная
+//  аудитория. По одной за раз и один раз навсегда.
+// ============================================================
+let tipNow=null, tipTimer=0;
+function showTip(tip){
+  const el=$("bubble"), tgt=$(tip.target);
+  if(!el||!tgt) return;
+  tipNow=tip;
+  el.textContent=tip.text();
+  const r=tgt.getBoundingClientRect();
+  const side = r.left > innerWidth*0.55;
+  el.className = "bubble" + (side?" side":"");
+  // Ширина пузыря задана в CSS явно: браузер считает её из остатка места
+  // справа от left ДО применения transform, и у кнопки в правой части экрана
+  // текст схлопнулся бы в колонку по слову в строке.
+  el.style.left = (side ? r.left-8 : r.left+r.width/2)+"px";
+  el.style.top  = (side ? r.top+r.height/2 : r.top-10)+"px";
+  el.hidden=false;
+  tgt.classList.add("tipTarget");
+  clearTimeout(tipTimer); tipTimer=setTimeout(closeTip, 11000);
+}
+function closeTip(){
+  if(!tipNow) return;
+  const tgt=$(tipNow.target); if(tgt) tgt.classList.remove("tipTarget");
+  S.tips[tipNow.id]=true; tipNow=null;
+  const el=$("bubble"); if(el) el.hidden=true;
+  persist(true);
+}
+function tipTick(){
+  if(tipNow || !booted) return;
+  if(modalOpen || dailyPending || offlineReport) return;   // окно возвращения → ежедневка → подсказка
+  if(!S.hintShown) return;                                 // во время обучающей подсказки молчим
+  const tip=TIPS.find(x=> !S.tips[x.id] && x.when());
+  if(tip) showTip(tip);
+}
+// любое действие игрока снимает подсказку: она уже сделала своё дело
+document.addEventListener('pointerdown', ()=>{ if(tipNow) closeTip(); }, true);
+
+// ============================================================
+//  ЯРЛЫК НА ГЛАВНЫЙ ЭКРАН И ЗАПРОС ОЦЕНКИ (idle-monetization.md §6)
+// ============================================================
+async function maybeShortcut(){
+  if(S.shortcutAsked || !ysdk || !ysdk.shortcut) return;
+  try{
+    const r=await ysdk.shortcut.canShowPrompt();
+    if(r && r.canShow) openModal('shortcut');
+  }catch(e){}
+}
+async function doShortcut(){
+  S.shortcutAsked=true; persist(true);
+  try{
+    // showPrompt() открывает нативный диалог — зовём строго из обработчика нажатия,
+    // иначе браузер может его не показать
+    const res=await ysdk.shortcut.showPrompt();
+    if(res && res.outcome==='accepted'){ S.seeds+=1; refreshHud(); persist(true); toast(T("seedGot")+" +1"); }
+  }catch(e){}
+  closeModal();
+}
+async function askReview(){
+  if(S.reviewAsked || !ysdk || !ysdk.feedback) return;
+  S.reviewAsked=true; persist(true);
+  try{
+    const can=await ysdk.feedback.canReview();     // обязателен перед requestReview
+    if(can && can.value) await ysdk.feedback.requestReview();
+  }catch(e){}
+}
+
+// ── подсказки: условные триггеры, показываются всем, включая давних игроков ──
+const TIPS = [
+  { id:'x2',  target:'x2Btn',    text:()=>T("tipX2"),     when:()=> S.toppings.length>=1 && !x2On() },
+  { id:'map', target:'routeChip',text:()=>T("tipMap"),    when:()=> S.drops>=8 },
+  { id:'off', target:'shopBtn',  text:()=>T("tipOffline"),when:()=> baseIps()>0 && S.toppings.length>=2 },
+  // прогон «упрямой» стратегии показал: одних новых видов мало, доход держат
+  // ВТОРЫЕ банки уже открытых начинок — это надо объяснить, а не оставлять на догадку
+  { id:'jar', target:'shopBtn',  text:()=>T("tipJar"),    when:()=> S.toppings.length>=2 && farmTotal()<=S.toppings.length },
+  { id:'seed',target:'upBtn',    text:()=>T("tipSeeds"),  when:()=> S.seeds>0 && S.seedsUsed===0 },
+];
+
+// ── один шаг собственной симуляции игры (его же крутит досчёт офлайна) ──
+// Твист «помощник с половником» работает и офлайн, но НЕ засчитывается в цели
+// чек-листа: иначе за ночь автоматика закрывает их сама.
+const AUTO_EVERY = 12;
+let autoAcc = 0;
+function simulateTick(sec){
+  earn(baseIps()*sec);
+  if(hasTwist('w1')){
+    autoAcc+=sec;
+    while(autoAcc>=AUTO_EVERY){ autoAcc-=AUTO_EVERY; autoDrop(); }
+  }
+}
+// сцену пересобираем при переезде — палитра места меняется
+function rebuildScene(){ if(catchUp) return; rebuildBg(); }
+function finaleArt(){
+  const c=document.createElement('canvas'); c.width=220; c.height=150;
+  c.style.cssText="width:100%;max-width:220px;display:block;margin:0 auto 6px";
+  try{ const g=c.getContext('2d'); drawTopping(g, TOPPINGS[TOPPINGS.length-1], 110, 80, 2.6); }catch(e){}
+  return c;
+}
 
 // ---------- HUD ----------
 const $ = id => document.getElementById(id);
-const fmt = n => n>=1e6 ? (n/1e6).toFixed(2)+"M" : n>=1e4 ? (n/1e3).toFixed(1)+"K" : Math.floor(n).toString();
+// Округляем ТОЛЬКО при показе — начисления остаются дробными.
+// Суффиксов хватает далеко за пределы Number.MAX_SAFE_INTEGER, иначе
+// форматирование выдаёт «1000T» и выглядит недоделкой.
+const SUFFIX = ["","K","M","B","T","Qa","Qi","Sx","Sp","Oc","No","Dc"];
+function fmt(n){
+  n = Number(n)||0;
+  if(n<1000) return Math.floor(n).toString();
+  let i=0; while(n>=1000 && i<SUFFIX.length-1){ n/=1000; i++; }
+  return (n<10 ? n.toFixed(2) : n<100 ? n.toFixed(1) : Math.floor(n).toString()) + SUFFIX[i];
+}
+function fmtDur(sec){
+  sec=Math.max(0,Math.floor(sec));
+  const h=Math.floor(sec/3600), m=Math.floor((sec%3600)/60);
+  return h>0 ? (h+" "+T("hOur")+(m?" "+m+" "+T("hMin"):"")) : (m+" "+T("hMin"));
+}
 function curHeight(){ return S.stack? S.stack.length-1 : 0; }
 function refreshHud(){
+  if(catchUp) return;   // досчёт зовёт обычный игровой шаг — интерфейс ему не нужен
   $("coinsV").textContent = fmt(S.coins);
   $("heightV").textContent = curHeight();
   $("coinsL").textContent = T("coins");
@@ -279,24 +916,52 @@ function refreshHud(){
   $("x2S").textContent    = on? Math.ceil((S.x2Until-Date.now())/60000)+(lang()==="ru"?" мин":" min") : (lang()==="ru"?"5 мин":"5 min");
   $("x2Btn").classList.toggle("off", on);
   $("langTxt").textContent = lang()==="ru" ? "RU" : "EN";
+  // премиальная валюта появляется в шапке только когда она у игрока есть
+  const sc=$("seedChip"); sc.hidden = !(S.seeds>0 || S.seedsUsed>0);
+  $("seedV").textContent = fmt(S.seeds); $("seedL").textContent = T("seeds");
+  refreshRouteBar();
   document.documentElement.setAttribute("lang", lang());
   if(modalOpen) buildModal(modalOpen);
 }
+// средний горизонт: текущее место, три точки чек-листа и ближайшая цель
+function refreshRouteBar(){
+  const i=stopIdx();
+  $("rbName").textContent = T(ROUTE[i].id);
+  $("rbNum").textContent  = (i+1)+"/"+ROUTE_N + ((S.loop>0)?(" · "+T("loopWord")+" "+(S.loop+1)):"");
+  for(let k=0;k<3;k++) $("rd"+k).classList.toggle("on", goalMet(i,k));
+  const g=nextGoal(), row=$("rbGoal");
+  if(g){ $("rbGoalT").textContent=g.text; $("rbGoalV").textContent=g.prog; row.classList.remove("ready"); }
+  else { $("rbGoalT").textContent=T("moveOn")+" →"; $("rbGoalV").textContent="✓"; row.classList.add("ready"); }
+}
 let toastT;
-function toast(msg){ const el=$("toast"); el.textContent=msg; el.classList.add("on");
+function toast(msg){ if(catchUp) return; const el=$("toast"); el.textContent=msg; el.classList.add("on");
   clearTimeout(toastT); toastT=setTimeout(()=>el.classList.remove("on"),1600); }
 
 // ---------- Награды ----------
-const giftAmt = () => Math.max(50, Math.floor(30 + S.bestHeight*4));
+const giftAmt = () => Math.max(80, Math.round(baseIps()*45));
 
 // ---------- Действия: покупки ----------
+// Банок одной начинки можно набрать сколько угодно: каждая капает мёдом,
+// цена следующей растёт мелким множителем. Первая банка вида ещё и открывает
+// постоянную прибавку к выручке за укладку.
 function buyTopping(id){
-  const sp=TI(id); if(!sp || S.toppings.includes(id)) return false;
+  const sp=TI(id); if(!sp) return false;
+  if(TOPPINGS.indexOf(sp) >= itemsUnlocked()) return false;   // вид открывается местом маршрута
   const c=toppingCost(sp);
   if(S.coins<c){ toast(T("need")); sfx("error"); return false; }
-  S.coins-=c; S.toppings.push(id);
-  if(S.toppings.length>=TOPPINGS.length) setTimeout(()=>toast(T("allToppings")), 700);
-  refreshHud(); persist(true); rebuildBg(); maybeInterstitial(); sfx("buy");
+  spend(c);
+  S.jars[id]=jarCount(id)+1;
+  const first = !S.toppings.includes(id);
+  if(first){ S.toppings.push(id); toast(T("newTopping")+" "+nm(sp)); }
+  else toast(T("bought")+" "+nm(sp)+" ×"+jarCount(id));
+  if(S.toppings.length>=TOPPINGS.length && first) setTimeout(()=>toast(T("allToppings")), 700);
+  refreshHud(); persist(true); if(first) rebuildBg(); sfx("buy");
+  return true;
+}
+function plantSeed(){
+  if(S.seeds<=0){ toast(T("seedNone")); sfx("error"); return false; }
+  S.seeds--; S.seedsUsed++;
+  refreshHud(); persist(true); sfx("buy");
   return true;
 }
 function buyUp(key){
@@ -304,10 +969,10 @@ function buyUp(key){
   const max={upSteady:MAX_STEADY,upTray:MAX_TRAY,upEye:MAX_EYE};
   if(S[key]>=max[key]) return false;
   const c=map[key](); if(S.coins<c){ toast(T("need")); sfx("error"); return false; }
-  S.coins-=c; S[key]++; refreshHud(); persist(true); sfx("buy"); return true;
+  spend(c); S[key]++; refreshHud(); persist(true); sfx("buy"); return true;
 }
 function claimGift(){
-  showRewarded(()=>{ const g=giftAmt(); S.coins+=g; refreshHud(); persist(true); sfx("coin");
+  showRewarded(()=>{ const g=giftAmt(); grant(g); refreshHud(); persist(true); sfx("coin");
     toast(T("giftGot")+" +"+fmt(g)); });
 }
 function claimX2(){
@@ -315,19 +980,17 @@ function claimX2(){
   showRewarded(()=>{ S.x2Until=Date.now()+300000; refreshHud(); persist(true); sfx("buy");
     toast(T("x2got")); });
 }
-function checkDaily(){
-  const today=new Date().toISOString().slice(0,10);
-  if(S.lastDaily!==today){
-    S.lastDaily=today; const g=Math.max(40, Math.floor(20 + S.bestHeight*3));
-    S.coins+=g; persist(true);
-    setTimeout(()=>toast(T("daily")+" +"+fmt(g)), 700);
-  }
-}
+
 
 // ---------- Модалки ----------
 let modalOpen=null;
-function openModal(kind){ modalOpen=kind; buildModal(kind); $("modal").classList.remove("hidden"); }
-function closeModal(){ modalOpen=null; $("modal").classList.add("hidden"); }
+function openModal(kind){ if(catchUp) return; modalOpen=kind; buildModal(kind); $("modal").classList.remove("hidden"); }
+function closeModal(){
+  // окно возвращения закрыто — отчёт отработал; иначе он навсегда блокирует
+  // очередь «окно возвращения → ежедневка → подсказка»
+  if(modalOpen==='offline') offlineReport=null;
+  modalOpen=null; $("modal").classList.add("hidden");
+}
 function toppingThumb(sp){
   const c=document.createElement('canvas'); c.width=104; c.height=88;
   const g=c.getContext('2d'); drawTopping(g,sp,52,50,1.7); return c;
@@ -336,15 +999,18 @@ function buildModal(kind){
   const body=$("mBody"); const can=(cost)=>S.coins>=cost;
   if(kind==='shop'){
     $("mTitle").textContent=T("shopTitle"); body.innerHTML="";
-    TOPPINGS.forEach(sp=>{
-      const owned=S.toppings.includes(sp.id);
+    $("mTitle").textContent=T("shopTitle");
+    TOPPINGS.forEach((sp,ti)=>{
+      const n=jarCount(sp.id);
       const row=document.createElement('div'); row.className="row";
       const th=toppingThumb(sp); th.className="thumb"; row.appendChild(th);
       const info=document.createElement('div'); info.className="info";
-      info.innerHTML='<div class="nm">'+nm(sp)+'</div><div class="ds">+'+Math.round(sp.mult*100)+'% '+T("ipsUnit")+'</div>';
+      info.innerHTML='<div class="nm">'+nm(sp)+(n?' ×'+n:'')+'</div><div class="ds">+'+fmt(sp.ips)+' '+T("ipsUnit")
+        +(n?' · '+T("inShelf")+' '+fmt(sp.ips*n)+' '+T("perSec"):'')+'</div>';
       row.appendChild(info);
       const b=document.createElement('button');
-      if(owned){ b.className="buy owned"; b.textContent=T("owned"); }
+      if(ti>=itemsUnlocked()){ b.className="buy can-not";
+        b.textContent="🔒 "+T("stopWord")+" "+(ROUTE.findIndex(r=>r.maxItems>=ti+1)+1); }
       else{ const c=toppingCost(sp); b.className="buy"+(can(c)?"":" can-not");
         b.textContent=T("buy")+" · "+fmt(c);
         b.onclick=()=>{ if(buyTopping(sp.id)) buildModal('shop'); }; }
@@ -372,8 +1038,137 @@ function buildModal(kind){
         b.onclick=()=>{ if(buyUp(u.k)) buildModal('up'); }; }
       row.appendChild(b); body.appendChild(row);
     });
+    // ── медовые соты: постоянный множитель, добровольно и без сброса прогресса ──
+    const sh=document.createElement('div'); sh.className="note";
+    sh.textContent=T("seedsDesc"); body.appendChild(sh);
+    const srow=document.createElement('div'); srow.className="row";
+    const sth=document.createElement('div'); sth.className="thumb";
+    sth.innerHTML='<svg viewBox="0 0 52 44" width="52" height="44"><path d="M26 8l10 6v12l-10 6-10-6V14z" fill="#F2C14E" stroke="#5C3B23" stroke-width="2.2" stroke-linejoin="round"/><path d="M26 14l5 3v6l-5 3-5-3v-6z" fill="#C97F22" stroke="#5C3B23" stroke-width="1.4" stroke-linejoin="round"/></svg>';
+    srow.appendChild(sth);
+    const sinfo=document.createElement('div'); sinfo.className="info";
+    sinfo.innerHTML='<div class="nm">'+T("seedsTitle")+' · '+fmt(S.seeds)+'</div><div class="ds">'
+      +T("seedBonusNow")+' ×'+seedMult().toFixed(2)+'</div>';
+    srow.appendChild(sinfo);
+    const sb=document.createElement('button'); sb.className="buy"+(S.seeds>0?"":" can-not");
+    sb.textContent=T("seedPlant");
+    sb.onclick=()=>{ if(plantSeed()) buildModal('up'); };
+    srow.appendChild(sb); body.appendChild(srow);
+
+  } else if(kind==='route'){
+    // ── дальний горизонт: вся карта с туманом, в одно нажатие из шапки ──
+    $("mTitle").textContent=T("routeTitle")+(S.loop>0?(" · "+T("loopWord")+" "+(S.loop+1)):"");
+    body.innerHTML="";
+    const cur=stopIdx();
+    ROUTE.forEach((r,i)=>{
+      const done=i<cur, isCur=i===cur;
+      // ближние остановки названы, дальние — силуэт и «???»: путь виден целиком,
+      // но без полного спойлера, который обесценил бы дорогу
+      const fog = i>Math.max(S.routeSeen, cur);
+      const el=document.createElement('div');
+      el.className="stop"+(isCur?" cur":done?" done":fog?" fog":"");
+      const num=document.createElement('div'); num.className="num"; num.textContent=done?"✓":(i+1); el.appendChild(num);
+      const sb=document.createElement('div'); sb.className="sb";
+      const nm=document.createElement('div'); nm.className="sn"; nm.textContent= fog? T("stopLocked") : T(r.id); sb.appendChild(nm);
+      const sw=document.createElement('div'); sw.className="sw";
+      sw.textContent = fog? "—" : (r.twist==='w0' ? T(r.twist) : T("twistWord")+": "+T(r.twist));
+      sb.appendChild(sw);
+      if(isCur){
+        const gl=document.createElement('div'); gl.className="glist";
+        for(let k=0;k<3;k++){
+          const ok=goalMet(i,k);
+          const it=document.createElement('div'); it.className="gitem"+(ok?" ok":"");
+          it.innerHTML='<span class="gm"></span><span class="gt"></span><span class="gv"></span>';
+          it.querySelector('.gt').textContent=goalText(i,k);
+          it.querySelector('.gv').textContent=goalProgress(i,k);
+          gl.appendChild(it);
+        }
+        sb.appendChild(gl);
+      }
+      el.appendChild(sb); body.appendChild(el);
+    });
+    const btn=document.createElement('button');
+    btn.className="wide"+(stopReady()?"":" ghost");
+    btn.textContent = stopReady() ? (isFinalStop()? T("finaleTitle") : T("moveOn"))
+                                  : (T("goalsLeft")+": "+[0,1,2].filter(k=>!goalMet(cur,k)).length);
+    btn.onclick=()=>{ if(stopReady()) advanceRoute(); else sfx("error"); };
+    body.appendChild(btn);
+    const note=document.createElement('div'); note.className="note"; note.textContent=T("bringsAlong");
+    body.appendChild(note);
+
+  } else if(kind==='finale'){
+    // ── псевдофинал: закрытие есть, но игра продолжается ──
+    $("mTitle").textContent=T("finaleTitle"); body.innerHTML="";
+    const th=finaleArt(); if(th) body.appendChild(th);
+    const note=document.createElement('div'); note.className="note"; note.textContent=T("finaleText");
+    body.appendChild(note);
+    const btn=document.createElement('button'); btn.className="wide okb"; btn.textContent=T("finaleGo");
+    btn.onclick=()=>{ closeModal(); rebuildScene(); refreshHud(); maybeInterstitial(); };
+    body.appendChild(btn);
+
+  } else if(kind==='offline'){
+    // ── окно возвращения: построчно, ЧТО ИМЕННО накопилось ──
+    const r=offlineReport||{away:0,used:0,gained:0,capped:false};
+    $("mTitle").textContent=T("offTitle"); body.innerHTML="";
+    const head=document.createElement('div'); head.className="note";
+    head.textContent=T("offAway")+" "+fmtDur(r.away);
+    body.appendChild(head);
+    const line=(ic,label,val)=>{
+      const el=document.createElement('div'); el.className="offline";
+      el.innerHTML='<span>'+ic+'</span><span></span><span class="ov"></span>';
+      el.children[1].textContent=label; el.children[2].textContent=val; body.appendChild(el);
+    };
+    // строки должны В СУММЕ давать «Всего» — иначе окно читается как ошибка счёта
+    const mult = permMult();
+    const parts = ITEMS.map(it=>({it, v: farmCount(it.id)*it.ips*mult*r.used}))
+                       .filter(x=>x.v>0).sort((a,b)=>b.v-a.v);
+    parts.slice(0,4).forEach(x=> line(ITEM_ICON, T(x.it.id)+" ×"+fmt(farmCount(x.it.id)), "+"+fmt(x.v)));
+    if(parts.length>4){
+      const rest=parts.slice(4).reduce((a,x)=>a+x.v,0);
+      line(ITEM_ICON2, T("otherItems")+" ×"+(parts.length-4), "+"+fmt(rest));
+    }
+    line("🪙", T("offTotal"), "+"+fmt(r.gained));
+    // если потолок был достигнут — сказать об этом, иначе читается как поломка
+    if(r.capped){ const n=document.createElement('div'); n.className="note"; n.textContent=T("offCap"); body.appendChild(n); }
+    const b1=document.createElement('button'); b1.className="wide okb"; b1.textContent=T("offClaimX2");
+    b1.onclick=()=>{ if(offlineReport && !offlineReport.x2Taken){ offlineReport.x2Taken=true;
+        showRewarded(()=>{ grant(offlineReport.gained); refreshHud(); persist(true); sfx("coin"); closeModal(); }); } };
+    body.appendChild(b1);
+    const b2=document.createElement('button'); b2.className="wide ghost"; b2.textContent=T("offClaim");
+    b2.onclick=()=>{ closeModal(); };
+    body.appendChild(b2);
+
+  } else if(kind==='daily'){
+    // ── ежедневная серия: 7 дней, награда от текущего темпа игрока ──
+    $("mTitle").textContent=T("dailyTitle"); body.innerHTML="";
+    const head=document.createElement('div'); head.className="note";
+    head.textContent=T("dailyStreak")+": "+S.daily.streak+"/7";
+    body.appendChild(head);
+    const row=document.createElement('div'); row.className="dayrow";
+    for(let i=0;i<7;i++){
+      const c=document.createElement('div');
+      c.className="dayc"+(i<S.daily.streak-1?" past":i===S.daily.streak-1?" cur":"");
+      c.innerHTML=T("dailyDay")+" "+(i+1)+'<span class="dv"></span>';
+      c.querySelector('.dv').textContent = dailySeeds(i)? "★" : fmt(dailyReward(i));
+      row.appendChild(c);
+    }
+    body.appendChild(row);
+    const b1=document.createElement('button'); b1.className="wide okb"; b1.textContent=T("dailyTakeX2");
+    b1.onclick=()=>claimDaily(true); body.appendChild(b1);
+    const b2=document.createElement('button'); b2.className="wide ghost"; b2.textContent=T("dailyTake");
+    b2.onclick=()=>claimDaily(false); body.appendChild(b2);
+
+  } else if(kind==='shortcut'){
+    $("mTitle").textContent=T("scTitle"); body.innerHTML="";
+    const n=document.createElement('div'); n.className="note"; n.textContent=T("scText"); body.appendChild(n);
+    const b1=document.createElement('button'); b1.className="wide okb"; b1.textContent=T("scAdd");
+    b1.onclick=doShortcut; body.appendChild(b1);
+    const b2=document.createElement('button'); b2.className="wide ghost"; b2.textContent=T("later");
+    b2.onclick=()=>{ S.shortcutAsked=true; persist(true); closeModal(); }; body.appendChild(b2);
+
   } else if(kind==='shelf'){
     $("mTitle").textContent=T("shelfTitle")+" ("+S.toppings.length+"/"+TOPPINGS.length+")"; body.innerHTML="";
+    const hn=document.createElement('div'); hn.className="note";
+    hn.textContent=T("shelfBonus")+" ×"+toppingMult().toFixed(2); body.appendChild(hn);
     const grid=document.createElement('div'); grid.className="coll";
     TOPPINGS.forEach(sp=>{
       const seen=S.toppings.includes(sp.id);
@@ -466,7 +1261,7 @@ function buildScenery(){
   steamP=[]; for(let i=0;i<6;i++) steamP.push({x:samX+rr(-4,4),y:samY-rr(0,40),life:rr(0,2),spd:rr(10,16)});
   curtainPh=0; beePhase=rr(0,6.28); catBreath=0;
 }
-function baseW(){ return Math.min(W*0.30, 140*charScale) * (1+0.06*S.upTray); }
+function baseW(){ return Math.min(W*0.30, 140*charScale) * (1+0.06*S.upTray) * panWide(); }   // «широкая сковорода» — твист места
 
 function drawSamovarStatic(g){
   const s=34*charScale, x=samX, y=samY;
@@ -721,10 +1516,20 @@ function drawBee(t){
 
 // ---------- Раунд: стопка блинов ----------
 let mover=null, particles=[], texts=[], fallPiece=null, roundState='play'; // play | fall | resetting
+// Автоукладка от твиста «помощник с половником»: работает и офлайн, но НЕ
+// засчитывается в цели чек-листа — иначе за ночь помощник закрывает их сам.
+function autoDrop(){
+  if(!S.stack || !S.stack.length) return false;
+  const top=S.stack[S.stack.length-1];
+  earn(dropBase());
+  S.stack.push({w:top.w, x:top.x, c:S.stack.length%4});
+  if(S.stack.length>60) S.stack=S.stack.slice(-40);   // очередь всегда ограничена
+  return true;
+}
 function startRound(silent){
   const w0 = Math.min(baseW(), W*0.34);
   S.stack=[{w:w0, x:plateX, c:0}];
-  S.combo=0; S.roundSaves=S.upSteady;
+  S.combo=0; S.roundSaves=freeSaves();   // «запасная лопатка» — твист места
   spawnMover();
   if(!silent) refreshHud();
 }
@@ -850,6 +1655,7 @@ function doDrop(){
     roundState='fall'; mover=null; sfx("error");
     const h=curHeight();
     S.bestHeight=Math.max(S.bestHeight,h); submitScore(S.bestHeight);
+    S.maxCombo=Math.max(S.maxCombo, S.combo);
     toast(T("fell")+" "+h);
     persist(true);
     setTimeout(()=>{ startRound(false); roundState='play'; refreshHud(); }, 1150);
@@ -860,16 +1666,24 @@ function doDrop(){
   const newW = isPerfect ? top.w : overlapW;
   const newX = isPerfect ? top.x : (ol+or_)/2;
   if(isPerfect) S.combo++; else S.combo=0;
-  const gain=Math.floor((3+Math.floor(S.stack.length*0.5)) * comboMult() * toppingMult() * (x2On()?2:1));
-  S.coins+=gain;
+  const golden=goldenDrop();
+  const gain=dropGain();
+  earn(gain); S.drops++;
+  S.maxCombo=Math.max(S.maxCombo, S.combo);
   S.stack.push({w:newW,x:newX,c:S.stack.length%4});
+  // «двойная порция» (твист последнего места) кладёт второй блин сразу
+  if(dropsPerTap()>1){
+    earn(dropBase()*(x2On()?2:1)); S.drops++;
+    S.stack.push({w:newW,x:newX,c:S.stack.length%4});
+  }
+  S.bestHeight=Math.max(S.bestHeight, curHeight());
   // крошки от срезанного края
   if(!isPerfect){
     if(l1<l2) crumbFx(l1+ (l2-l1)/2, dropY, PANC_COLORS[mover.c%PANC_COLORS.length]);
     if(r1>r2) crumbFx(r1-(r1-r2)/2, dropY, PANC_COLORS[mover.c%PANC_COLORS.length]);
   }
-  burstFx(newX,dropY,isPerfect?'#F2C14E':'#E8A33D','+'+fmt(gain)+(isPerfect?' '+T('perfect'):''));
-  sfx(isPerfect?"coin":"tap");
+  burstFx(newX,dropY,(isPerfect||golden)?'#F2C14E':'#E8A33D','+'+fmt(gain)+(isPerfect?' '+T('perfect'):''));
+  sfx((isPerfect||golden)?"coin":"tap");
   if(!S.hintDropShown){ S.hintDropShown=true; }
   refreshHud(); persist();
   spawnMover();
@@ -877,10 +1691,15 @@ function doDrop(){
 
 // ---------- Кадр ----------
 let lastT=performance.now();
+let hudAcc=0, tipAcc=0;
 function frame(now){
   let dt=Math.max(0,Math.min(0.05,(now-lastT)/1000)); lastT=now;
   const t=now/1000;
   if(mover && roundState==='play') mover.phase += dt*mover.speed;
+  if(baseIps()>0) earn(ips()*dt);        // производство — earn, подарки — grant
+  if(hasTwist('w1')){ autoAcc+=dt; while(autoAcc>=AUTO_EVERY){ autoAcc-=AUTO_EVERY; autoDrop(); } }
+  hudAcc+=dt; if(hudAcc>=0.5){ hudAcc=0; refreshHud(); persist(); }
+  tipAcc+=dt; if(tipAcc>=1){ tipAcc=0; tipTick(); maybeInterstitial(); }
   updateFx(dt);
 
   ctx.clearRect(0,0,W,H);
@@ -906,21 +1725,135 @@ cv.addEventListener("pointerdown", e=>{
 
 // ---------- Тест-хуки (Playwright) ----------
 window.render_game_to_text = () => JSON.stringify({
-  coins:S.coins, lvl:curHeight(), height:curHeight(), bestHeight:S.bestHeight,
+  coins:S.coins, lifetime:S.lifetime, lvl:curHeight(), height:curHeight(), bestHeight:S.bestHeight,
   upSteady:S.upSteady, upTray:S.upTray, upEye:S.upEye,
-  toppings:S.toppings.length, upCost:upCost(), x2:x2On(), lang:lang(),
+  toppings:S.toppings.length, jars:farmTotal(), toppingMult:toppingMult(),
+  ips:ips(), baseIps:baseIps(), drops:S.drops, maxCombo:S.maxCombo,
+  seeds:S.seeds, seedsUsed:S.seedsUsed,
+  route:S.route, routeSeen:S.routeSeen, loop:S.loop, stop:stop().id,
+  goals:[0,1,2].map(k=>goalMet(stopIdx(),k)), ready:stopReady(),
+  streak:S.daily.streak, dailyPending:dailyPending, tips:Object.keys(S.tips).length,
+  upCost:upCost(), x2:x2On(), lang:lang(), modal:modalOpen,
   combo:S.combo, roundSaves:S.roundSaves, roundState,
   moverW: mover?mover.w:0, moverX: mover?moverX():0,
   topW: S.stack?S.stack[S.stack.length-1].w:0, topX: S.stack?S.stack[S.stack.length-1].x:0
 });
-window.advanceTime = ms => { refreshHud(); };
+window.__buyTopping = id => buyTopping(id);
+window.__forceGoals = () => { const i=stopIdx();
+  TOPPINGS.slice(0,Math.max(GOALS[i][0].n,3)).forEach(t=>{ if(!S.toppings.includes(t.id)) S.toppings.push(t.id);
+    if(!jarCount(t.id)) S.jars[t.id]=1; });
+  S.drops=Math.max(S.drops,2000); S.bestHeight=Math.max(S.bestHeight,120);
+  S.maxCombo=Math.max(S.maxCombo,30); S.seedsUsed=Math.max(S.seedsUsed,10);
+  S.upTray=MAX_TRAY; S.upEye=MAX_EYE;
+  const top=TOPPINGS[Math.max(0,itemsUnlocked()-1)];
+  S.jars[top.id]=Math.max(jarCount(top.id),5);
+  for(let k=0;k<3;k++){
+    if(GOALS[i][k].t!=='income') continue;
+    const per=top.ips*permMult();
+    if(per>0) S.jars[top.id]=Math.max(jarCount(top.id), Math.ceil(goalReq(i,k)/per)+1);
+  }
+  refreshHud(); };
+// ---------- Тест-хуки ----------
+// Прогон симуляции без интерфейса — для замера баланса (idle-economy-balance.md §10)
+window.simulateFor = seconds => { fastForward(seconds); refreshHud(); };
+window.snapshot = () => ({ coins:S.coins, lifetime:S.lifetime, ips:baseIps(),
+  items:farmTotal(), collection:collectionCount(), route:S.route, loop:S.loop, seeds:S.seedsUsed });
+window.advanceTime = ms => { fastForward(ms/1000); refreshHud(); };
+window.__grant = n => { grant(n); refreshHud(); persist(true); };
+window.__earn  = n => { earn(n); refreshHud(); persist(true); };
+window.__route = () => advanceRoute();
+window.__openModal = k => openModal(k);
+window.__closeModal = () => closeModal();
+window.__setLastSeen = ms => { S.lastSeen = ms; };
+window.__checkOffline = () => { const r=checkOffline(); if(r) openModal('offline'); return offlineReport; };
+window.__checkDaily = () => { const r=checkDaily(); if(r) openModal('daily'); return r; };
+window.__claimDaily = () => claimDaily(false);
+window.__plantSeed = () => plantSeed();
+window.__tipTick = () => { tipTick(); return tipNow? tipNow.id : null; };
+window.__adAllowed = () => adAllowed();
+
+// ============================================================
+//  Бот для прогона баланса (idle-economy-balance.md §10.3)
+//  Гоняет ту же симуляцию, что и игра, без интерфейса, и возвращает
+//  таблицу «время до вех» в минутах активной игры. Бот кладёт блины
+//  идеально — это верхняя граница мастерства, а не средний игрок.
+// ============================================================
+function botOptions(){
+  const base=Math.max(1e-6, baseIps()), o=[];
+  if(S.upTray  <MAX_TRAY)   o.push({k:'up',key:'upTray',  cost:trayCost(),  gain:0.05*base+1});
+  if(S.upEye   <MAX_EYE)    o.push({k:'up',key:'upEye',   cost:eyeCost(),   gain:0.05*base+1});
+  if(S.upSteady<MAX_STEADY) o.push({k:'up',key:'upSteady',cost:steadyCost(),gain:0.02*base+1});
+  TOPPINGS.forEach((t,ti)=>{ if(ti>=itemsUnlocked()) return;
+    o.push({k:'top',key:t.id,cost:toppingCost(t),gain:t.ips*permMult()}); });
+  return o.filter(x=>x.cost>0 && x.gain>0);
+}
+function botBuy(strategy){
+  if(S.seeds>0) plantSeed();
+  for(let guard=0; guard<12; guard++){
+    let o=botOptions().filter(x=>x.cost<=S.coins);
+    if(strategy==='stubborn') o=o.filter(x=>x.k==='top');
+    if(!o.length) return;
+    const pick = (strategy==='greedy')
+      ? o.reduce((a,b)=>b.cost<a.cost?b:a)
+      : o.reduce((a,b)=> (b.cost/b.gain)<(a.cost/a.gain)?b:a);   // лучшая окупаемость
+    if(pick.k==='up') buyUp(pick.key); else buyTopping(pick.key);
+  }
+}
+window.__bal = function(strategy){
+  strategy=strategy||'optimal';
+  S=fresh(); platformLang='ru'; startRound(true);
+  const rows=[]; let minutes=0, offlineH=0, lastLoop=0;
+  const snap = label => rows.push({label, minutes, offlineH, ips:baseIps(),
+    species:S.toppings.length, ups:S.upTray+S.upEye+S.upSteady, seeds:S.seedsUsed});
+  const tick = () => {
+    catchUp=true; window.__silent=true;
+    try{
+      earn(baseIps());
+      if(hasTwist('w1')){ autoAcc+=1; while(autoAcc>=AUTO_EVERY){ autoAcc-=AUTO_EVERY; autoDrop(); } }
+      // примерно одна укладка в секунду, всегда идеальная
+      if(mover && roundState==='play'){ window.__forcePerfect(); doDrop(); }
+      if(S.stack && S.stack.length>200) S.stack=S.stack.slice(-40);
+      botBuy(strategy);
+    } finally { catchUp=false; window.__silent=false; }
+    minutes += 1/60;
+  };
+  const session = mins => { for(let i=0;i<mins*60;i++){ tick();
+    if(stopReady()){
+      catchUp=true; window.__silent=true; try{
+        S.seeds+=stopSeeds(stopIdx()); grant(Math.max(100,baseIps()*180));
+        if(isFinalStop()){ S.loop++; S.route=0; } else S.route++;
+      } finally { catchUp=false; window.__silent=false; }
+      snap(S.loop>lastLoop ? ('ФИНАЛ (круг '+S.loop+')') : ('место '+(S.route+1)+' '+stop().id));
+      lastLoop=S.loop;
+      if(S.loop>=1) return true;
+    } } return false; };
+  const offline = hours => { offlineH+=hours; fastForward(hours*3600); };
+  snap('старт');
+  let stopped=false;
+  for(let day=0; day<45 && !stopped; day++){
+    if(day>0) offline(8);
+    if(session(13)){ stopped=true; break; }
+    offline(2); if(session(13)){ stopped=true; break; }
+    offline(2); if(session(13)){ stopped=true; break; }
+  }
+  if(!stopped) snap('прогон оборван (не дошёл)');
+  return rows;
+};
+window.__hintDone = () => { S.hintShown=true; };
+window.__toggleLang = () => toggleLang();
+// Подменить содержимое сейва и перезагрузить страницу. Без testNoSave обработчик
+// pagehide дожал бы текущее состояние поверх подменённого, и тест проверял бы не то.
+window.__seedSave = raw => {
+  testNoSave=true;
+  try{ if(raw===null) localStorage.removeItem(SAVE_KEY); else localStorage.setItem(SAVE_KEY, raw); }catch(e){}
+};
+
 window.__drop = () => doDrop();
 window.__forcePerfect = () => { if(mover){ const top=S.stack[S.stack.length-1]; mover.xOverride=top.x; } };
 window.__forceMiss = () => { if(mover){ const top=S.stack[S.stack.length-1]; mover.xOverride=top.x+top.w*3+mover.w*2+40; } };
 window.__alignMover = x => { if(mover) mover.xOverride=x; };
 window.__moverPos = () => ({x: mover?moverX():0, w: mover?mover.w:0});
 window.__topPos = () => S.stack? {x:S.stack[S.stack.length-1].x, w:S.stack[S.stack.length-1].w} : null;
-window.__grant = n => { S.coins+=n; refreshHud(); persist(); };
 window.__buyNextTopping = () => { const n=nextTopping(); return n? buyTopping(n.id) : false; };
 window.__buyUp = key => buyUp(key);
 window.__toggleLang = () => toggleLang();
@@ -932,36 +1865,56 @@ function boot(raw){
   restore(raw);
   resize();
   if(!S.stack) startRound(true);
-  refreshHud(); checkDaily();
+  const hadOffline = checkOffline();          // досчёт офлайна ДО показа интерфейса
+  bootAt=Date.now();
+  refreshHud();
   $("giftBtn").onclick=claimGift;
   $("x2Btn").onclick=claimX2;
   $("shopBtn").onclick=()=>openModal('shop');
   $("upBtn").onclick=()=>openModal('up');
   $("shelfBtn").onclick=()=>openModal('shelf');
+  $("routeChip").onclick=()=>openModal('route');
   $("langBtn").onclick=toggleLang;
   $("mClose").onclick=closeModal;
   $("modal").addEventListener("click", e=>{ if(e.target.id==='modal') closeModal(); });
   document.documentElement.setAttribute("lang", lang());
+  persist(true);
+  // приоритет окон: окно возвращения → ежедневный бонус → подсказки
+  const daily = checkDaily();
+  if(hadOffline) openModal('offline');
+  else if(daily) openModal('daily');
   if(!S.hintDropShown){
-    setTimeout(()=>{ if(!S.hintDropShown && S.coins<60 && curHeight()===0) toast(T("hintDrop")); }, 2500);
-  }
+    setTimeout(()=>{ if(!S.hintDropShown && S.drops===0) toast(T("hintDrop")); }, 2500);
+  } else S.hintShown=true;
+  // дальний горизонт показываем в первый заход, а не на пятой минуте
+  if(!S.routeSeen && S.drops<1){ S.routeSeen=1; setTimeout(()=>{ if(!modalOpen) openModal('route'); }, 6000); }
+  setTimeout(maybeShortcut, 180000);          // ярлык — когда игрок уже втянулся
   startMusic();
   requestAnimationFrame(frame);
 }
 (function initSDK(){
   let localRaw=null; try{ localRaw=localStorage.getItem(SAVE_KEY); }catch(e){}
+  // Сигнал готовности уходит ДО того, как игра станет доступна для действий,
+  // ровно один раз и на ВСЕХ путях запуска (включая ветку без SDK и таймаут).
+  let readySent=false;
+  function sendReady(){
+    if(readySent) return; readySent=true;
+    try{ ysdk && ysdk.features && ysdk.features.LoadingAPI && ysdk.features.LoadingAPI.ready(); }catch(e){}
+  }
+  function go(raw){ sendReady(); boot(raw); }
   function start(){
     if(window.YaGames && !window.__noSDK){
       YaGames.init().then(sdk=>{
         ysdk=sdk;
-        try{ sdk.features.LoadingAPI && sdk.features.LoadingAPI.ready(); }catch(e){}
-        const pReady = sdk.getPlayer({scopes:false}).then(p=>{player=p;return p.getData(["save"]);})
-          .then(d=>boot(d&&d.save?d.save:localRaw)).catch(()=>boot(localRaw));
+        readPlatformLang();                      // язык платформы читаем ДО первой отрисовки
         try{ lb = sdk.leaderboards; }catch(e){}
-        return pReady;
-      }).catch(()=>boot(localRaw));
-      setTimeout(()=>boot(localRaw),4000);
-    } else boot(localRaw);
+        return sdk.getPlayer({scopes:false})
+          .then(p=>{ player=p; return p.getData(["save"]); })
+          .then(d=>go(d&&d.save?d.save:localRaw))
+          .catch(()=>go(localRaw));
+      }).catch(()=>go(localRaw));
+      setTimeout(()=>go(localRaw),4000);
+    } else go(localRaw);
   }
   if(window.__noSDK || window.YaGames) start();
   else window.__onSdkScriptDone = start;
